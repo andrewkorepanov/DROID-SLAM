@@ -1,0 +1,5 @@
+#!/bin/bash
+
+DOCKER_CONTAINER_IMAGE_NAME=droid-slam
+DOCKER_CONTAINER_IMAGE_TAG=latest
+DOCKER_CONTAINER_NAME=droid-slam

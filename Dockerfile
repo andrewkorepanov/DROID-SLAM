@@ -86,5 +86,10 @@ RUN cd DROID-SLAM && \
 # Cleanup
 RUN rm -rf DROID_SLAM
 
+WORKDIR /root/DROID-SLAM
+
+COPY ./model/ ./
+RUN bash -c ./tools/download_sample_data.sh
+
 # Set entry commands
 ENTRYPOINT ["/bin/bash"]
