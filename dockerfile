@@ -51,7 +51,7 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Set working directory
+# Set root directory
 RUN mkdir -p /root/
 WORKDIR /root/
 
@@ -68,27 +68,25 @@ ENV PATH="/root/miniconda3/bin:${PATH}"
 
 # Install Droid SLAM dependencies
 RUN conda install python=3.9
-
 RUN conda install pytorch==1.10.1 torchvision==0.11.2 torchaudio==0.10.1 cudatoolkit=11.3 -c pytorch -c conda-forge
-
 RUN pip install gdown matplotlib open3d opencv-python torch-scatter tensorboard scipy tqdm pyyaml
-
 RUN conda install -c conda-forge suitesparse
 
+# Set workspace directory
+RUN mkdir -p /workspace/
+WORKDIR /workspace/
+
 # Clone repository
-WORKDIR /root
 RUN git clone --recursive https://github.com/pytholic/DROID-SLAM.git
 
 # Install extensions
 RUN cd DROID-SLAM && \
     python setup.py install
 
-# Cleanup
-RUN rm -rf DROID_SLAM
+# Set working directory
+WORKDIR /workspace/DROID-SLAM
 
-WORKDIR /root/DROID-SLAM
-
-COPY ./model/ ./
+COPY ./.model/ ./
 RUN bash -c ./tools/download_sample_data.sh
 
 # Set entry commands
