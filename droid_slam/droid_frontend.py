@@ -41,10 +41,10 @@ class DroidFrontend:
         if self.graph.corr is not None:
             self.graph.rm_factors(self.graph.age > self.max_age, store=True)
 
-        self.graph.add_proximity_factors(self.t1-5, max(self.t1-self.frontend_window, 0), 
+        self.graph.add_proximity_factors(self.t1-5, max(self.t1-self.frontend_window, 0),
             rad=self.frontend_radius, nms=self.frontend_nms, thresh=self.frontend_thresh, beta=self.beta, remove=True)
 
-        self.video.disps[self.t1-1] = torch.where(self.video.disps_sens[self.t1-1] > 0, 
+        self.video.disps[self.t1-1] = torch.where(self.video.disps_sens[self.t1-1] > 0,
            self.video.disps_sens[self.t1-1], self.video.disps[self.t1-1])
 
         for itr in range(self.iters1):
@@ -56,7 +56,7 @@ class DroidFrontend:
 
         if d.item() < self.keyframe_thresh:
             self.graph.rm_keyframe(self.t1 - 2)
-            
+
             with self.video.get_lock():
                 self.video.counter.value -= 1
                 self.t1 -= 1
@@ -111,9 +111,7 @@ class DroidFrontend:
         # do initialization
         if not self.is_initialized and self.video.counter.value == self.warmup:
             self.__initialize()
-            
-        # do update
-        elif self.is_initialized and self.t1 < self.video.counter.value:
-            self.__update()
 
-        
+        # do update
+        elif self.is_initialized and self.t1 < self.video.counter.value - 1:
+            self.__update()
